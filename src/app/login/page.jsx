@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 function loginPage() {
+  const Router = useRouter()
+  
   const [loading, setLoading] = React.useState(true)
   const [buttonDisabled, setButtonDisabled] = React.useState(false)
 
@@ -34,6 +36,8 @@ function loginPage() {
 
       const response = await axios.post("/api/users/login", user);
       console.log("success")
+      Router.push("/profile")
+
 
     }catch(error){
       console.log("login error", error)
