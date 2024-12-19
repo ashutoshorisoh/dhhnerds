@@ -16,7 +16,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="text-white text-2xl">
+    <div className="text-black text-2xl">
       <h1>Profile</h1>
       <button onClick={logout}>Logout</button>
     </div>

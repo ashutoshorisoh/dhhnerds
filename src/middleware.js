@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"; // For decoding the JWT token
 // Helper function to get the userId from the token
 const getUserIdFromToken = (token) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify and decode the token
+    const decoded = jwt.verify(token, process.env.TOKEN_SECRET); // Verify and decode the token
     return decoded.userId; // Assuming 'userId' is in the token payload
   } catch (error) {
     return null; // Token verification failed

@@ -11,9 +11,15 @@ const RecentAlbums = () => {
   // Handle click on album cover and redirect to album page with full album data
   const handleClick = (album) => {
     const albumId = String(album._id); // Ensure _id is a string
-    router.push(`/album/${albumId}`);  // Pass the albumId in the URL
+    const name = album.albumname; // URL-safe album name
+  
+    // Build the query string manually for dynamic routes
+    const url = `/album/albumId=${albumId}`;
+  
+    router.push(url);
   };
-
+  
+  
   useEffect(() => {
     const fetchRecentAlbums = async () => {
       try {

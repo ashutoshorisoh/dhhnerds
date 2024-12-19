@@ -3,8 +3,8 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import {toast} from "react-hot-toast"
-import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 function loginPage() {
   const Router = useRouter()
