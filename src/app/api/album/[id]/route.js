@@ -7,11 +7,15 @@ connectDB();
 
 // Handle GET request for fetching album by ID
 export async function GET(req, { params }) {
-  const { id } =  await params; // Extract album id from URL params
+  const { id } = await params; // Extract album id from URL params
 
   try {
-    // Fetch album data from MongoDB
-    const album = await Album.findById(id);
+    // Fetch album data from MongoDB and populate the username field in reviews
+    const album = await Album.findById(id)
+      .populate({
+        path: "reviews.username",  // Populate the `username` field from the user model
+        select: "username",         // Only select the `username` field from the user model
+      });
 
     // If no album is found, return an error response
     if (!album) {

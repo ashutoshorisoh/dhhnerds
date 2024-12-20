@@ -168,8 +168,11 @@ const AlbumPage = () => {
             {albumData?.reviews?.length > 0 ? (
               albumData.reviews.map((review) => (
                 <div key={review._id} className="p-4 bg-[#3A3A3A] rounded-md shadow-md">
-                  <p className="text-sm">{review.reviewText}</p>
-                </div>
+  <h1 className="text-sm font-bold">
+    {review.username?.username}: <span className="text-sm font-thin">{review.reviewText}</span>
+  </h1>
+</div>
+
               ))
             ) : (
               <p className="text-gray-400">No reviews yet.</p>
