@@ -5,3 +5,38 @@
 body{
   background-color: black;
 }
+.hero-bg {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://i.pinimg.com/736x/17/05/6f/17056fca2760812801711861251ba8cf.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.1; /* Adjust opacity of the image */
+  z-index: -1; /* Ensure the background image is behind the text */
+}
+
+/* Hide the scrollbar in Webkit browsers (Chrome, Safari, Edge, etc.) */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar in Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar in IE/Edge */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+}
+
