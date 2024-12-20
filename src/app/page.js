@@ -96,7 +96,7 @@ const RecentAlbums = () => {
     <div className="flex flex-col justify-center gap-5 items-center text-white h-auto w-screen hero-bg">
       {/* Hero Section */}
       <div className="flex justify-center items-center text-center pl-40 pr-40 lg:flex-wrap flex-nowrap ">
-        <div className="lg:text-6xl mt-20 text-3xl font-semibold">
+        <div className="lg:text-6xl mt-20 text-md font-semibold">
           <h1>
             Track Latest Release Desi Hip Hop Projects
             Tell your friends what’s good. 
@@ -125,11 +125,17 @@ const RecentAlbums = () => {
       {/* Recent Releases Section */}
       <div 
         ref={releaseSectionRef} // Attach the ref to this div
-        className="w-full max-h-screen overflow-y-auto flex justify-center lg:pl-5 lg:pr-5 pl-2 pr-2 items-start lg:pt-8 pt-2 lg:pb-8"
+        className="w-full max-h-screen overflow-y-auto flex flex-col justify-center lg:pl-5 lg:pr-5 pl-2 pr-2 items-start lg:pt-8 pt-2 lg:pb-8"
       >
+        <div className=" flex justify-start pl-2 mb-2 items-center w-full "> 
+        <h1 className="text-center font-bold"> Latest Releases:</h1>
+
+        </div>
         <div className="flex -gap-1 gap-2 w-full overflow-x-auto hide-scrollbar">
+          
+          
           {recentAlbums.length > 0 ? (
-            recentAlbums.slice(-7).map((album, index) => (
+            recentAlbums.map((album, index) => (
               <div key={index} className="lg:w-[30%] w-full flex justify-center">
                 <div className="relative cursor-pointer w-[200px] h-[200px] lg:h-[300px] overflow-hidden rounded-lg shadow-lg bg-[#2C2C2C] hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                   <img
@@ -156,7 +162,7 @@ const RecentAlbums = () => {
           onClick={() => router.push("/addArtist")}
           className="bg-[#FF5722] text-white px-6 py-3 rounded-full text-sm mb-10 font-semibold hover:bg-[#E64A19] transition-all duration-300"
         >
-          Didn't see your favorite artist's project? Add his name
+          Didn't see your favorite artist's project? Add their name
         </button>
       </div>
     </div>
