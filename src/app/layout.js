@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import '../app/globals.css';
 import { EmailWrapper } from "./context/context.js";
 import Head from "next/head"; // Make sure this is imported
+import { Analytics } from "@vercel/analytics/react"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,8 @@ export default function RootLayout({ children }) {
             {children}
           </div>
         </EmailWrapper>
+
+        <Analytics />
       </body>
     </html>
   );
