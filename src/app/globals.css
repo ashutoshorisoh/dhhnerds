@@ -21,7 +21,7 @@ body{
   background-image: url('https://i.pinimg.com/736x/17/05/6f/17056fca2760812801711861251ba8cf.jpg');
   background-size: cover;
   background-position: center;
-  opacity: 0.1; /* Adjust opacity of the image */
+  opacity: 9%; /* Adjust opacity of the image */
   z-index: -1; /* Ensure the background image is behind the text */
 }
 

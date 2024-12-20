@@ -93,42 +93,44 @@ const RecentAlbums = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center gap-5 items-center text-white h-auto w-screen hero-bg">
+    <div className="flex flex-col justify-center gap-5 items-center text-white h-auto w-screen overflow-x-hidden overflow-y-auto hero-bg   ">
       {/* Hero Section */}
-      <div className="flex justify-center items-center text-center pl-40 pr-40 lg:flex-wrap flex-nowrap ">
-        <div className="lg:text-6xl mt-20 text-md font-semibold">
-          <h1>
-            Track Latest Release Desi Hip Hop Projects
-            Tell your friends what’s good. 
-            Get started
-            <p className="mt-5">
-              — it‘s <span className="bg-yellow-600">free!</span>
-            </p>
-          </h1>
+      <div className="flex justify-center items-center text-left pl-40 pr-40   ">
+      <div className="lg:text-6xl mt-20 text-xs font-semibold lg:w-auto w-full sm:w-11/12 mx-auto text-center sm:text-left">
+  <h1>
+    Track Latest Release Desi Hip Hop Projects
+    <span> Tell your friends what’s good. </span>
+    Get started
+    <br/>
+    <span className="mt-5">
+      — it‘s <span className="bg-blue-200 text-black lg:text-5xl">free!</span>
+    </span>
+  </h1>
 
-          {/* Show Welcome message if user is logged in */}
-          {username ? (
-            <p className="mt-5 font-thin">Welcome, {username}!</p>
-          ) : (
-            <p className="mt-5">Welcome, Guest!</p>
-          )}
+  {/* Show Welcome message if user is logged in */}
+  {username ? (
+    <p className="mt-2 font-thin">Welcome, {username}!</p>
+  ) : (
+    <p className="mt-5">Welcome, Guest!</p>
+  )}
 
-          <button
-            onClick={scrollToReleaseSection} // Add click handler to scroll to the release section
-            className="bg-green-800 rounded-sm lg:pl-10 pl-5 lg:pr-10 pr-5 lg:pt-5 pt-3 pb-3 lg:pb-5 mt-5 lg:text-xl text-sm hover:bg-green-200 hover:text-black"
-          >
-            Get Started
-          </button>
-        </div>
+  <button
+    onClick={scrollToReleaseSection} // Add click handler to scroll to the release section
+    className="bg-green-800 rounded-sm lg:pl-10 pl-2 lg:pr-10 pr-2 lg:pt-5 pt-2 pb-2 lg:pb-5 mt-5 lg:text-xl text-xs hover:bg-green-200  hover:text-black"
+  >
+    Get Started
+  </button>
+</div>
+
+
       </div>
 
       {/* Recent Releases Section */}
       <div 
         ref={releaseSectionRef} // Attach the ref to this div
-        className="w-full max-h-screen overflow-y-auto flex flex-col justify-center lg:pl-5 lg:pr-5 pl-2 pr-2 items-start lg:pt-8 pt-2 lg:pb-8"
+        className="w-full max-h-screen overflow-y-auto flex flex-col justify-center items-start mt-5 pl-1  pr-1"
       >
         <div className=" flex justify-start pl-2 mb-2 items-center w-full "> 
-        <h1 className="text-center font-bold"> Latest Releases:</h1>
 
         </div>
         <div className="flex -gap-1 gap-2 w-full overflow-x-auto hide-scrollbar">
