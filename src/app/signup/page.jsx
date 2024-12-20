@@ -68,7 +68,7 @@ function Signuppage() {
           name="fullname"
           value={user.fullname}
           onChange={handleChange}
-          className="rounded-lg pt-2 pb-2 pl-4 text-start bg-transparent border-white border"
+          className="rounded-lg pt-2 pb-2 pl-4 text-start bg-transparent border-white text-white border"
         />
         </div>
         
@@ -138,7 +138,7 @@ function Signuppage() {
          <div className="flex justify-end items-center">
          <button onClick={onSignUp} disabled={buttonDisabled}
          className="text-black bg-white rounded-lg text-center pl-3 pr-3 pt-2 pb-2 ">
-          {buttonDisabled ? "no sign up" : "signup"}
+          {buttonDisabled ? "fill all details to create a account" : "signup"}
         </button>
          </div>
          

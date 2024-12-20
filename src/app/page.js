@@ -3,22 +3,18 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const RecentAlbums = () => {
-  const [recentAlbums, setRecentAlbums] = useState([]); // Initialize as an empty array
+  const [recentAlbums, setRecentAlbums] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  // Handle click on album cover and redirect to album page with full album data
   const handleClick = (album) => {
-    const albumId = String(album._id); // Ensure _id is a string
-    const name = album.albumname; // URL-safe album name
+    const albumId = String(album._id); 
+    const name = album.albumname;
   
-    // Build the query string manually for dynamic routes
     const url = `/album/albumId=${albumId}`;
-  
     router.push(url);
   };
-  
   
   useEffect(() => {
     const fetchRecentAlbums = async () => {
@@ -27,7 +23,6 @@ const RecentAlbums = () => {
         const data = await response.json();
 
         if (response.ok) {
-          // Set the recent albums data to the state
           setRecentAlbums(data.recentAlbumsCoverArt || []);
         } else {
           setError(data.error || "Unknown error");
@@ -52,25 +47,49 @@ const RecentAlbums = () => {
   }
 
   return (
-    <div className="text-white h-screen w-screen flex justify-center item-center bg-blue-800">
-      <div className="flex lg:flex-row gap-10 justify-center items-start p-4 h-[1000px] w-[1000px] overflow-hidden ">
-        {recentAlbums.length > 0 ? (
-          recentAlbums.map((album, index) => (
-            <div key={index} className="h-[1000px] w-[1000px] overflow-hidden">
+    <div className="w-full min-h-screen overflow-y-auto flex justify-center items-start pt-8 pb-8 bg-[#1A1A1A]">
+  {/* Parent container for albums */}
+  <div className="w-full max-w-screen-xl px-6">
+    {/* Recent Releases Label */}
+    <h2 className="text-3xl font-semibold text-white mb-6 text-center">Recent Releases</h2>
+
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 w-full">
+      {recentAlbums.length > 0 ? (
+        recentAlbums.map((album, index) => (
+          <div key={index} className="w-full flex justify-center">
+            <div className="relative w-full overflow-hidden rounded-lg shadow-lg bg-[#2C2C2C] hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
               <img
-                src={album.coverartURL}
-                alt={`Cover art of ${album.artistName}'s album`}
-                style={{ width: "200px", height: "200px", objectFit: "contain" }}
-                onClick={() => handleClick(album)} // Pass the full album object
-                className="h-full w-full object-contain"
+                src={album.coverartURL || "default-album-cover.jpg"}
+                alt={`Cover art of ${album.artist}'s album`}
+                onClick={() => handleClick(album)}
+                className="w-full h-auto object-cover rounded-lg"
               />
+              <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent text-white text-xs font-semibold">
+                {album.albumname}
+              </div>
             </div>
-          ))
-        ) : (
-          <p>No recent albums found.</p>
-        )}
-      </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-center text-gray-400 w-full">No recent albums found.</p>
+      )}
     </div>
+
+    {/* Footer Section with Button */}
+    <div className="w-full flex justify-center mt-8">
+      <button
+        onClick={() => router.push("/addArtist")}
+        className="bg-[#FF5722] text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-[#E64A19] transition-all duration-300"
+      >
+        Didn't see your favorite artist's project? Add his name
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+  
   );
 };
 
