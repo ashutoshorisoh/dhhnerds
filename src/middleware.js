@@ -14,45 +14,42 @@ const getUserIdFromToken = (token) => {
 export function middleware(request) {
   const path = request.nextUrl.pathname;
 
-  // Define public paths (accessible without authentication)
-  const isPublicPath = path === '/login' || path === '/signup';
-
   // Get the token from cookies
   const token = request.cookies.get('token')?.value || '';
-  
+
   // Debugging logs to check the behavior
   console.log("Path:", path);
   console.log("Token:", token);
 
-  // Case 1: If the user is authenticated and tries to access /login or /signup, redirect to the home page
-  if (isPublicPath && token) {
+  // Case 1: If token exists, block access to login/signup pages and redirect to home page
+  if (token && (path === '/login' || path === '/signup')) {
     return NextResponse.redirect(new URL('/', request.nextUrl));
   }
 
-  // Case 2: If the user is not authenticated and tries to access a protected route (like /profile or album/[id]/post), redirect to /login
-  if (!isPublicPath && !token) {
+  // Case 2: If token does not exist and trying to access protected pages (e.g. /profile), redirect to login
+  if (!token && path === '/profile') {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
 
-  // If the token is available, decode it and pass the userId to the request
+  // Case 3: If token exists, allow access to protected pages like /profile, otherwise redirect to login
   if (token) {
     const userId = getUserIdFromToken(token);
     if (userId) {
-      // You can attach userId to the request headers or as a custom header
-      request.headers.set('x-user-id', userId); // Passing userId as custom header
+      // Optionally attach userId to the request headers if needed
+      request.headers.set('x-user-id', userId);
     }
   }
 
-  // Allow the request to continue to the page or API
+  // Allow the request to continue for all other routes (public routes and dynamic routes)
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
     '/',                 // Home page - accessible to all
-    '/profile',          // Protected route - requires authentication
+    '/profile',          // Protected route - requires authentication (token)
     '/login',            // Public route - for login
     '/signup',           // Public route - for signup
-    '/album/:path*/post', // Dynamic route matcher for album/[id]/post
+    '/album/:path', // Dynamic route matcher for album/[id]/post
   ],
 };

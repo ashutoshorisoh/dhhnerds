@@ -13,8 +13,11 @@ export default function Profile() {
     try {
       await axios.get("/api/users/logout");
       router.push("/login");
+
     } catch (error) {
       console.error("Error during logout:", error);
+    }finally{
+      setUserEmail('')
     }
   };
 
