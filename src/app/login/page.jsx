@@ -1,16 +1,18 @@
 "use client"
 
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Link from "next/link";
 import {toast} from "react-hot-toast"
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { emailContext } from "../context/context.js";
 
 function loginPage() {
   const Router = useRouter()
   
   const [loading, setLoading] = React.useState(true)
   const [buttonDisabled, setButtonDisabled] = React.useState(false)
+  const {setUserEmail, userEmail} = emailContext()
 
   const [user, setUser] = React.useState({
       
@@ -37,6 +39,7 @@ function loginPage() {
       const response = await axios.post("/api/users/login", user);
       console.log("success")
       Router.push("/profile")
+      
 
 
     }catch(error){
@@ -44,6 +47,10 @@ function loginPage() {
       
     }finally{
       setLoading(false)
+      setUserEmail(user.email)
+      console.log(userEmail)
+      console.log("loggedin")
+      
     }
   }
 

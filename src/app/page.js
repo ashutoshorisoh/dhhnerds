@@ -52,18 +52,17 @@ const RecentAlbums = () => {
   }
 
   return (
-    <div className="text-white">
-      <h2>Recent Album Releases</h2>
-      <div className="albums-grid">
+    <div className="text-white h-screen w-screen flex justify-center item-center bg-blue-800">
+      <div className="flex lg:flex-row gap-10 justify-center items-start p-4 h-[1000px] w-[1000px] overflow-hidden ">
         {recentAlbums.length > 0 ? (
           recentAlbums.map((album, index) => (
-            <div key={index} className="album-item">
-              <h3>{album.artistName}</h3>
+            <div key={index} className="h-[1000px] w-[1000px] overflow-hidden">
               <img
                 src={album.coverartURL}
                 alt={`Cover art of ${album.artistName}'s album`}
-                style={{ width: "200px", height: "200px", objectFit: "cover" }}
+                style={{ width: "200px", height: "200px", objectFit: "contain" }}
                 onClick={() => handleClick(album)} // Pass the full album object
+                className="h-full w-full object-contain"
               />
             </div>
           ))

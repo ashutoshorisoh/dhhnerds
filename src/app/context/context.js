@@ -1,40 +1,36 @@
-"use client"
+"use client";
+
 import { createContext, useState, useContext, useEffect } from "react";
 
-// Create a context for the user
-const UserContext = createContext();
+const userEmailContext = createContext('');
 
-// Create a provider component
-export function UserProvider({ children }) {
-  const [user, setUser] = useState(null);
+export const EmailWrapper = ({ children }) => {
+  const [userEmail, setUserEmail] = useState('');
 
-  // Example: simulate fetching user data on mount (replace with actual logic)
+  // Load the email from localStorage when the component mounts
   useEffect(() => {
-    // You can replace this with your logic to get the user (e.g., from localStorage, cookies, or an API)
-    const loggedInUser = JSON.parse(localStorage.getItem("user")); // or use your own authentication method
-
-    if (loggedInUser) {
-      setUser(loggedInUser);
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedEmail) {
+      setUserEmail(storedEmail);
     }
   }, []);
 
+  // Update localStorage whenever userEmail changes
+  useEffect(() => {
+    if (userEmail) {
+      localStorage.setItem("userEmail", userEmail);
+    } else {
+      localStorage.removeItem("userEmail");
+    }
+  }, [userEmail]);
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <userEmailContext.Provider value={{ userEmail, setUserEmail }}>
       {children}
-    </UserContext.Provider>
+    </userEmailContext.Provider>
   );
-}
+};
 
-// Custom hook to use the UserContext
-export function useUser() {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-  return context;
-}
-
-// Example helper to get user from context (this is just an example, adjust as needed)
-export function getUserFromContext(context) {
-  return context?.user || null;
+export function emailContext() {
+  return useContext(userEmailContext);
 }
