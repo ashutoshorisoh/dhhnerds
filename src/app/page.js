@@ -97,7 +97,7 @@ const RecentAlbums = () => {
     {/* Hero Section */}
     {/* Hero Section */}
 <div
-  className="flex flex-col justify-center items-center text-white h-screen w-screen overflow-hidden hero-bg"
+className={`flex flex-col justify-center items-center text-white h-screen w-screen overflow-hidden hero-bg ${userEmail ? 'hidden' : 'block'}`}
 >
   <div className="text-center px-8 lg:px-40">
     <h1 className="text-5xl lg:text-7xl  font-light mb-10">
