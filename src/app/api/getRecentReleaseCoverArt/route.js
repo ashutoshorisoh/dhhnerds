@@ -1,8 +1,8 @@
-import { fetchSpotifyAccessToken, getAccessToken, ensureValidAccessToken } from '../accesstoken/route';
+import { fetchSpotifyAccessToken, getAccessToken, ensureValidAccessToken } from '../accesstoken/route'; 
 import axios from 'axios';
 import connectDB from '@/dbconfig/dbconfig';
 import Artist from '@/models/artist.model';
-import Album from '@/models/album.model';
+import Release from '@/models/releases.model'; // Assuming the release model is properly set up
 
 export async function GET(req) {
   connectDB();
@@ -35,12 +35,12 @@ export async function GET(req) {
     }
 
     // Use Promise.all to parallelize Spotify API requests for efficiency
-    const albumRequests = artists.map(async (artist) => {
+    const releaseRequests = artists.map(async (artist) => {
       const spotifyURL = artist.spotifyURL;
       const artistSpotifyId = spotifyURL.split('/').pop().split("?")[0];
 
-      // Fetch the artist's recent album from Spotify
-      const spotifyAPI = `https://api.spotify.com/v1/artists/${artistSpotifyId}/albums?include_groups=album&limit=1`;
+      // Fetch the artist's releases from Spotify (e.g., singles, albums, etc.)
+      const spotifyAPI = `https://api.spotify.com/v1/artists/${artistSpotifyId}/albums?include_groups=album,single,appears_on,compilation&limit=10`;
       try {
         const response = await axios.get(spotifyAPI, {
           headers: {
@@ -48,56 +48,59 @@ export async function GET(req) {
           },
         });
 
-        const recentAlbum = response.data.items[0];  // Get the most recent album
+        const releases = response.data.items;  // Get all releases
 
-        if (recentAlbum) {
-          // Check if the album already exists in the database
-          const existingAlbum = await Album.findOne({
-            albumname: recentAlbum.name,
-            coverartURL: recentAlbum.images[0]?.url || '',
+        // Process each release
+        for (let releaseItem of releases) {
+          const existingRelease = await Release.findOne({
+            name: releaseItem.name,
+            releaseDate: releaseItem.release_date,
+            artist: artist._id,  // Ensure it matches the correct artist
           });
 
-          if (!existingAlbum) {
-            // If album doesn't exist, create a new one
-            const newAlbum = new Album({
-              albumname: recentAlbum.name,
-              coverartURL: recentAlbum.images[0]?.url || '',
-              releaseDate: new Date(recentAlbum.release_date),
-              artist: artist._id,  // Link the album to the artist
-              averageRating: 0,
+          if (!existingRelease) {
+            // If release doesn't exist, create a new one
+            const newRelease = new Release({
+              details: {
+                name: releaseItem.name,
+                coverArtURL: releaseItem.images[0]?.url || '',  // Optional: add other details from releaseItem
+                releaseDate: new Date(releaseItem.release_date),
+              },
+              artist: artist._id,  // Link the release to the artist
               reviews: [],
-              otherartists: [],
+              averageRating: 0,
             });
 
-            // Save the album to the database
-            await newAlbum.save();
-            console.log(`Album ${recentAlbum.name} saved to database.`);
+            // Save the new release to the database
+            await newRelease.save();
+            console.log(`Release ${releaseItem.name} saved to database.`);
           }
         }
       } catch (error) {
-        console.error(`Error fetching albums for artist ${artist.artistname}:`, error.message);
+        console.error(`Error fetching releases for artist ${artist.artistname}:`, error.message);
       }
     });
 
     // Wait for all requests to finish
-    await Promise.all(albumRequests);
+    await Promise.all(releaseRequests);
 
-    // Fetch all albums with necessary data (e.g., cover art, artist)
-    const allAlbums = await Album.find().populate('artist');  // .populate('artist') to get artist info if needed
+    // Optionally, return a response with the saved releases (for confirmation)
+    const allReleases = await Release.find().populate('artist');  // You can populate artist data if needed
 
-    // Map data to send only necessary fields to frontend
-    const recentAlbumsCoverArt = allAlbums.map((album) => ({
+    const recentAlbums = allReleases.map((album) => ({
       _id: album._id,
-      coverartURL: album.coverartURL,
-      artistName: album.artist.artistname,  // Adjust according to how you structure your artist's name
+      coverartURL: album.details.coverArtURL,
+      artist: album.artist,  // Adjust according to how you structure your artist's name
     }));
 
     // Return all album data
-    return new Response(JSON.stringify({ recentAlbumsCoverArt }), { status: 200 });
+    console.log('Returning recent albums:', recentAlbums);
+    return new Response(JSON.stringify({ recentAlbums }), { status: 200 });
+    
+    
 
   } catch (error) {
     console.error('Error in Spotify request:', error.message);
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
-

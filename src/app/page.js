@@ -67,11 +67,13 @@ const RecentAlbums = () => {
       try {
         const response = await fetch("/api/getRecentReleaseCoverArt");
         const data = await response.json();
-
+        console.log('Fetched data:', data); // Log the full response
+        
         if (response.ok) {
-          setRecentAlbums(data.recentAlbumsCoverArt || []);
+          setRecentAlbums(data.recentAlbums || []);
         } else {
           setError(data.error || "Unknown error");
+          console.log("Error data:", data);
         }
       } catch (error) {
         console.error("Error fetching recent albums:", error);
@@ -80,6 +82,7 @@ const RecentAlbums = () => {
         setLoading(false);
       }
     };
+    
 
     fetchRecentAlbums();
   }, []);
@@ -131,25 +134,26 @@ className={`flex flex-col justify-center items-center text-white h-screen w-scre
 >
   <h2 className="text-2xl font-semibold mb-5 text-left pl-4">Recent Releases</h2>
   <div className="flex overflow-x-auto gap-x-4 hide-scrollbar">
-    {recentAlbums.length > 0 ? (
-      recentAlbums.map((album, index) => (
-        <div key={index} className="flex-shrink-0">
-          <div className="relative cursor-pointer w-[150px] h-[200px] overflow-hidden rounded-md shadow-md bg-[#2C2C2C] hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-            <img
-              src={album.coverartURL || "default-album-cover.jpg"}
-              alt={`Cover art of ${album.artist}'s album`}
-              onClick={() => handleClick(album)}
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black to-transparent text-white text-sm font-semibold">
-              {album.albumname}
-            </div>
-          </div>
+  {recentAlbums.length > 0 ? (
+  recentAlbums.map((album, index) => (
+    <div key={index} className="flex-shrink-0">
+      <div className="relative cursor-pointer w-[150px] h-[200px] overflow-hidden rounded-md shadow-md bg-[#2C2C2C] hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+        <img
+          src={album.coverArtURL || "default-album-cover.jpg"}
+          alt={`Cover art of ${album.artist?.name || 'Unknown Artist'}'s album`}
+          onClick={() => handleClick(album)}
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black to-transparent text-white text-sm font-semibold">
+          {album.details?.name}
         </div>
-      ))
-    ) : (
-      <p className="text-center text-gray-400">No recent albums found.</p>
-    )}
+      </div>
+    </div>
+  ))
+) : (
+  <p className="text-center text-gray-400">No recent albums found.</p>
+)}
+
   </div>
 </div>
 
