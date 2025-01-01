@@ -37,7 +37,7 @@ export async function GET(req) {
     // Use Promise.all to parallelize Spotify API requests for efficiency
     const albumRequests = artists.map(async (artist) => {
       const spotifyURL = artist.spotifyURL;
-      const artistSpotifyId = spotifyURL.split('/').pop();
+      const artistSpotifyId = spotifyURL.split('/').pop().split("?")[0];
 
       // Fetch the artist's recent album from Spotify
       const spotifyAPI = `https://api.spotify.com/v1/artists/${artistSpotifyId}/albums?include_groups=album&limit=1`;
