@@ -85,94 +85,96 @@ const AlbumPage = () => {
   if (error) return <div>Error: {error}</div>; // Show error message
 
   return (
-    <div className="min-h-screen w-full overflow-y-auto bg-[#1A1A1A] text-white">
-      <div className="flex flex-col lg:flex-row lg:p-20 p-10 justify-center items-center gap-8 lg:gap-12 w-full">
-        
-        {/* Album Image (Box 1) */}
-        <div className="flex justify-center items-center rounded-lg overflow-hidden lg:w-1/2 w-full bg-[#2C2C2C] shadow-lg">
-          <img
-            src={albumData?.coverartURL || "default-image.jpg"}
-            alt={`${albumData?.albumname || "Album"} Cover`}
-            className="h-auto w-full object-cover rounded-md shadow-md"
-          />
+    <div className="min-h-screen w-full overflow-y-auto bg-gray-900 text-white">
+    <div className="flex flex-col lg:flex-row lg:p-20 p-10 justify-center items-center gap-12 w-full">
+  
+      {/* Album Image Section */}
+      <div className="flex justify-center items-center rounded-lg overflow-hidden lg:w-1/2 w-full bg-gray-800 shadow-lg">
+        <img
+          src={albumData?.coverartURL || "default-image.jpg"}
+          alt={`${albumData?.albumname || "Album"} Cover`}
+          className="w-full object-cover rounded-md"
+        />
+      </div>
+  
+      {/* Album Details and Reviews Section */}
+      <div className="flex flex-col bg-gray-800 p-8 rounded-lg shadow-lg lg:w-1/2 w-full">
+        {/* Album Name and Rating */}
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold mb-2">
+            {albumData?.albumname || "Unknown Album"}
+          </h2>
+          <p className="text-sm">
+            Average Rating:
+            <span className="bg-orange-600 text-white rounded px-2 py-1 ml-2">
+              {albumData?.averageRating || 0}/5
+            </span>
+          </p>
         </div>
-
-        {/* Album Details, Reviews, and Form (Box 2) */}
-        <div className="flex flex-col bg-[#2C2C2C] p-6 rounded-lg shadow-lg lg:w-1/2 w-full gap-6">
-          
-          {/* Album Name and Rating */}
-          <div className="text-center">
-            <h2 className="lg:text-xl text-lg font-bold mb-4">
-              {albumData?.albumname || "Unknown"}
-            </h2>
-            <p className="text-sm font-light">
-              Average Rating:
-              <span className="bg-orange-600 text-white rounded-md px-2 py-1 ml-2">
-                {albumData?.averageRating || 0}/5
-              </span>
-            </p>
-          </div>
-
-          {/* Review Form */}
-          <form onSubmit={handleReviewSubmit} className="flex flex-col gap-4">
-            
-            {/* Rating and Textarea on the Same Line */}
-            <div className="flex gap-4">
-              <div className="flex flex-col" style={{ minWidth: "100px" }}>
-                <label className="text-sm font-medium mb-2">Rate:</label>
-                <select
-                  value={rating}
-                  onChange={(e) => setRating(Number(e.target.value))}
-                  disabled={isSubmitting}
-                  className="w-full p-2 bg-[#3A3A3A] text-white rounded-md"
-                >
-                  <option value={1}>1</option>
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col flex-grow">
-                <label className="text-sm font-medium mb-2">Your Thoughts:</label>
-                <textarea
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  className="w-full p-3 bg-[#3A3A3A] text-white rounded-md resize-none min-h-[60px]"
-                  disabled={isSubmitting}
-                />
-              </div>
+  
+        {/* Review Form */}
+        <form onSubmit={handleReviewSubmit} className="flex flex-col gap-6">
+          {/* Rating and Thoughts */}
+          <div className="flex flex-col gap-4 lg:flex-row">
+            <div className="flex flex-col w-full lg:w-1/3">
+              <label className="text-sm font-medium mb-2">Rate:</label>
+              <select
+                value={rating}
+                onChange={(e) => setRating(Number(e.target.value))}
+                disabled={isSubmitting}
+                className="w-full p-3 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+              </select>
             </div>
-
-            {/* Submit Button Below */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`w-full py-3 rounded-lg text-sm font-bold ${
-                isSubmitting ? "bg-gray-600" : "bg-green-600 hover:bg-green-700"
-              } text-white transition duration-200`}
-            >
-              {isSubmitting ? "Submitting..." : "Submit Review"}
-            </button>
-          </form>
-
-          {/* Display Message */}
-          {message && (
-            <div className="mt-4 text-center text-sm text-yellow-400">{message}</div>
-          )}
-
-          {/* Reviews Section */}
-          <div className="flex flex-col overflow-y-auto mt-5 max-h-96 gap-4">
-            <h3 className="text-lg font-semibold">Reviews</h3>
+  
+            <div className="flex flex-col w-full">
+              <label className="text-sm font-medium mb-2">Your Thoughts:</label>
+              <textarea
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                className="w-full p-3 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                disabled={isSubmitting}
+                rows={4}
+              />
+            </div>
+          </div>
+  
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`w-full py-3 rounded-lg font-bold transition duration-200 ${
+    isSubmitting ? "bg-gray-600 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+  } text-white`}
+          >
+            {isSubmitting ? "Submitting..." : "Submit Review"}
+          </button>
+        </form>
+  
+        {/* Feedback Message */}
+        {message && (
+          <div className="mt-4 text-center text-sm text-yellow-400">{message}</div>
+        )}
+  
+        {/* Reviews Section */}
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold mb-4">Reviews</h3>
+          <div className="flex flex-col gap-4 max-h-80 overflow-y-auto">
             {albumData?.reviews?.length > 0 ? (
               albumData.reviews.map((review) => (
-                <div key={review._id} className="p-4 bg-[#3A3A3A] rounded-md shadow-md">
-  <h1 className="text-sm font-bold">
-    {review.username?.username}: <span className="text-sm font-thin">{review.reviewText}</span>
-  </h1>
-</div>
-
+                <div
+                  key={review._id}
+                  className="p-4 bg-gray-700 rounded-lg shadow-md"
+                >
+                  <h4 className="font-bold mb-1">
+                    {review.username?.username}
+                  </h4>
+                  <p className="text-sm text-gray-300">{review.reviewText}</p>
+                </div>
               ))
             ) : (
               <p className="text-gray-400">No reviews yet.</p>
@@ -181,6 +183,7 @@ const AlbumPage = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
